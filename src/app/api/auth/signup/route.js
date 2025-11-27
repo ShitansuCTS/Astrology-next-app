@@ -39,6 +39,7 @@ export async function POST(req) {
             password: await bcrypt.hash(password, 10),
             phone: phone || "",
             profilePic: profilePic || "",
+            role: "user",
             // astroId is automatically generated via schema default
         });
 
@@ -58,6 +59,7 @@ export async function POST(req) {
                     phone: astrologer.phone,
                     profilePic: astrologer.profilePic,
                     createdAt: astrologer.createdAt,
+                    role: astrologer.role
                 },
             },
             { status: 201 }

@@ -9,6 +9,7 @@ const AstrologerSchema = new mongoose.Schema({
     password: { type: String, required: true },
     phone: { type: String, trim: true },
     profilePic: { type: String, default: "" },
+    role: { type: String, enum: ["user", "superAdmin"], default: "user" },
     createdAt: { type: Date, default: Date.now },
 });
 

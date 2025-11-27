@@ -23,7 +23,7 @@ export async function POST(req) {
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) return NextResponse.json({ message: "Invalid credentials" }, { status: 401 });
 
-        const token = signToken({ id: user._id, email: user.email });
+        const token = signToken({ id: user._id, email: user.email, role: user.role });
 
         const response = NextResponse.json({
             message: "Login successful",
@@ -32,6 +32,7 @@ export async function POST(req) {
                 fname: user.fname,
                 lname: user.lname,
                 email: user.email,
+                role: user.role,
             },
         });
 
