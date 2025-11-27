@@ -34,7 +34,7 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts"
-, "src/app/me/page.js"  ],
+, "src/app/me/page.js", "src/components/auth/SignUpForm.jsx", "src/components/auth/SignInForm.jsx"  ],
   "exclude": [
     "node_modules"
   ]
