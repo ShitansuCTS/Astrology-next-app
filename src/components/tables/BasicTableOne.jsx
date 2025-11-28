@@ -1,4 +1,5 @@
-import React from "react";
+'use client'
+import React, { useEffect } from "react";
 import {
   Table,
   TableBody,
@@ -9,24 +10,14 @@ import {
 
 import Badge from "../ui/badge/Badge";
 import Image from "next/image";
+import useClientStore from "@/store/clientStore";
+import { UserCircleIcon } from "@/icons";
+import { useRouter } from "next/navigation";
 
-interface Order {
-  id: number;
-  user: {
-    image: string;
-    name: string;
-    role: string;
-  };
-  projectName: string;
-  team: {
-    images: string[];
-  };
-  status: string;
-  budget: string;
-}
+
 
 // Define the table data using the interface
-const tableData: Order[] = [
+const tableData = [
   {
     id: 1,
     user: {
@@ -112,12 +103,52 @@ const tableData: Order[] = [
 ];
 
 export default function BasicTableOne() {
+  const { clients, loading, error, fetchClients } = useClientStore();
+  const [search, setSearch] = React.useState("");
+  const router = useRouter();
+
+  const filteredClients = clients.filter((client) =>
+    client.name.toLowerCase().includes(search.toLowerCase())
+  );
+
+  useEffect(() => {
+    fetchClients();
+  }, [])
+
+
   return (
-    <div className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
-      <div className="max-w-full overflow-x-auto">
-        <div className="min-w-[1102px]">
-          <Table>
-            {/* Table Header */}
+    <>
+      <div className="rounded-xl border border-gray-200 bg-white dark:border-white/10 dark:bg-white/[0.03] p-4 mb-4">
+        <div className="flex items-center justify-between">
+
+          {/* LEFT TITLE */}
+          <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-200">
+            My Users
+          </h2>
+
+          {/* RIGHT SEARCH */}
+          <input
+            type="text"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Search by name..."
+            className="px-3 py-2 border border-gray-300 dark:border-white/20 
+             rounded-lg w-64 text-sm bg-white dark:bg-transparent
+             text-gray-800 dark:text-gray-200
+             placeholder-gray-400 dark:placeholder-gray-500
+              dark:focus:border-blue-400 
+             outline-none transition"
+          />
+        </div>
+      </div>
+
+
+
+      <div className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
+        <div className="max-w-full overflow-x-auto">
+          <div className="min-w-[1102px]">
+            {/* <Table>
+         
             <TableHeader className="border-b border-gray-100 dark:border-white/[0.05]">
               <TableRow>
                 <TableCell
@@ -153,7 +184,7 @@ export default function BasicTableOne() {
               </TableRow>
             </TableHeader>
 
-            {/* Table Body */}
+          
             <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
               {tableData.map((order) => (
                 <TableRow key={order.id}>
@@ -205,8 +236,8 @@ export default function BasicTableOne() {
                         order.status === "Active"
                           ? "success"
                           : order.status === "Pending"
-                          ? "warning"
-                          : "error"
+                            ? "warning"
+                            : "error"
                       }
                     >
                       {order.status}
@@ -218,9 +249,109 @@ export default function BasicTableOne() {
                 </TableRow>
               ))}
             </TableBody>
-          </Table>
+          </Table> */}
+
+
+            <Table>
+              {/* Table Header */}
+              <TableHeader className="border-b border-gray-100 dark:border-white/[0.05]">
+                <TableRow>
+                  <TableCell
+                    isHeader
+                    className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+                  >
+                    User Info
+                  </TableCell>
+                  <TableCell
+                    isHeader
+                    className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+                  >
+                    DOB
+                  </TableCell>
+                  <TableCell
+                    isHeader
+                    className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+                  >
+                    Phone
+                  </TableCell>
+                  <TableCell
+                    isHeader
+                    className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+                  >
+                    Address                </TableCell>
+                  <TableCell
+                    isHeader
+                    className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+                  >
+                    Action
+                  </TableCell>
+                </TableRow>
+              </TableHeader>
+
+              {/* Table Body */}
+              <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
+                {filteredClients.map((items) => (
+                  <TableRow key={items._id}>
+                    <TableCell className="px-5 py-4 sm:px-6 text-start">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 overflow-hidden rounded-full">
+                          <Image
+                            width={40}
+                            height={40}
+                            src="/images/user/user-21.jpg"
+                            alt="profile"
+                          />
+                        </div>
+                        <div>
+                          <span className="block font-medium text-gray-800 text-theme-sm dark:text-white/90">
+                            {items.name}
+                          </span>
+                          <span className="block text-gray-500 text-theme-xs dark:text-gray-400">
+                            {items.email}
+                          </span>
+                        </div>
+                      </div>
+                    </TableCell>
+                    <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                      <Badge
+                        size="sm"
+                        color="success"
+                      >
+                        {new Date(items.dob).toLocaleDateString("en-US", {
+                          year: "numeric",
+                          month: "long",
+                          day: "numeric",
+                        })}
+                      </Badge>
+                    </TableCell>
+                    <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                      <Badge
+                        size="sm"
+                        color="error"
+                      >
+                        {items.phone || "N/A"}
+                      </Badge>
+                    </TableCell>
+                    <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
+                      {items.address}
+                    </TableCell>
+                    <TableCell className="px-4 py-3 text-start">
+                      <button
+                        onClick={() => router.push(`/client/${items._id}`)}
+                        className="flex items-center gap-2 px-3 py-1.5 rounded-md bg-blue-500 text-white hover:bg-blue-600 transition"
+                      >
+                        <UserCircleIcon />
+                        Profile
+                      </button>
+                    </TableCell>
+
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }

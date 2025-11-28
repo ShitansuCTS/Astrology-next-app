@@ -19,7 +19,15 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${outfit.className} dark:bg-gray-900`}>
         <ThemeProvider>
-          <SidebarProvider>{children} <Toaster position="top-center" /></SidebarProvider>
+          <SidebarProvider>{children} <Toaster
+            position="top-right"
+            containerStyle={{
+              top: "100px", // adjust according to navbar height
+              right: "20px",
+              zIndex: 9999,
+            }}
+          />
+          </SidebarProvider>
         </ThemeProvider>
       </body>
     </html>

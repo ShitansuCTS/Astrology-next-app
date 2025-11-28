@@ -23,7 +23,10 @@ const useProfileStore = create((set, get) => ({
 
             const data = await res.json();
 
-            if (!res.ok) throw new Error(data.message || "Failed to fetch profile");
+            if (!res.ok) {
+                set({ error: data.message, loading: false });
+                return null;
+            }
 
             // ✅ Save fetched user in store
             set({ user: data.user, loading: false });
