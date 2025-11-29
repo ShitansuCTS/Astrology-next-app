@@ -13,6 +13,11 @@ import Image from "next/image";
 import { format } from "timeago.js"
 import { Edit2, Trash2, Plus } from "lucide-react";
 import Badge from "../ui/badge/Badge";
+import DatePicker from '@/components/form/date-picker';
+// import Appointment from "./Apponments";
+
+
+
 
 
 export default function ClientDetails({ clientId }) {
@@ -23,6 +28,17 @@ export default function ClientDetails({ clientId }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modalMode, setModalMode] = useState("add"); // "add" or "edit"
     const [currentNote, setCurrentNote] = useState({ text: "", _id: null });
+    const [isAppointmentOpen, setIsAppointmentOpen] = useState(false);
+    const [appointments, setAppointments] = useState([]);
+
+    const [appointmentData, setAppointmentData] = useState({
+        clientId: "",
+        astrologerId: "",
+        date: "",
+        timeSlot: "",
+        type: "",
+        notes: "",
+    });
 
     const openModal = (mode = "add", note = { text: "", _id: null }) => {
         setModalMode(mode);
@@ -51,10 +67,6 @@ export default function ClientDetails({ clientId }) {
     }, [clientId]); // always include clientId as dependency
 
 
-    // console.log("The client data is:", client.getAstorlogerId)
-
-
-
     useEffect(() => {
         if (!clientId || !getAstorlogerId) return;
 
@@ -80,8 +92,6 @@ export default function ClientDetails({ clientId }) {
 
         fetchNotes();
     }, [clientId, getAstorlogerId]);
-
-
 
 
     const handleSaveNote = async () => {
@@ -129,6 +139,107 @@ export default function ClientDetails({ clientId }) {
             toast.error(err.response?.data?.message || "Failed to delete note");
         }
     };
+
+    // Update a field
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setAppointmentData((prev) => ({
+            ...prev,
+            [name]: value,
+        }));
+    };
+
+    const resetFields = () => {
+        setAppointmentData({
+            clientId: "",
+            astrologerId: "",
+            date: "",
+            timeSlot: "",
+            type: "",
+            notes: "",
+        });
+    };
+
+
+
+
+    // Functions to open/close the modal
+    const openAppointmentModal = () => setIsAppointmentOpen(true);
+    const closeAppointmentModal = () => setIsAppointmentOpen(false);
+
+
+    const handleSubmit = async () => {
+        const dataToSend = {
+            clientId,          // pass from props or state
+            astrologerId: getAstorlogerId, // pass from state
+            date: appointmentData.date,
+            timeSlot: appointmentData.timeSlot,
+            type: appointmentData.type,
+            notes: appointmentData.notes,
+        };
+
+        if (!dataToSend.clientId || !dataToSend.astrologerId || !dataToSend.date || !dataToSend.timeSlot || !dataToSend.notes) {
+            toast.error("Please fill all required fields");
+            return;
+        }
+
+        try {
+            const res = await fetch("/api/appointments", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(dataToSend),
+            });
+
+            const result = await res.json();
+            if (!res.ok) throw new Error(result.message || "Failed to create appointment");
+
+            toast.success("Appointment created successfully!");
+            closeAppointmentModal();
+            resetFields();
+            setAppointments([result.appointment, ...appointments]);
+
+        } catch (err) {
+            toast.error(err.message);
+        }
+    };
+
+
+    useEffect(() => {
+        // wait until BOTH are available
+        if (!clientId || !getAstorlogerId) return;
+
+        const fetchAppointments = async () => {
+            try {
+                setLoading(true);
+
+                const res = await fetch(
+                    `/api/appointments?clientId=${clientId}&astrologerId=${getAstorlogerId}`,
+                    {
+                        method: "GET",
+                        headers: { "Content-Type": "application/json" },
+                        credentials: "include",
+                    }
+                );
+
+                if (!res.ok) throw new Error("Failed to fetch appointments");
+
+                const data = await res.json();
+                setAppointments(data.appointments);
+                console.log("Appointments:", data.appointments);
+            } catch (err) {
+                console.error(err);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchAppointments();
+    }, [clientId, getAstorlogerId]);
+
+
+
+
+
 
 
     return (
@@ -233,54 +344,46 @@ export default function ClientDetails({ clientId }) {
                 </div>
             </div>
             <div className="p-5 border border-gray-200 rounded-2xl dark:border-gray-800 lg:p-6 mt-2">
-                <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
-                    <div>
-                        <h4 className="text-lg font-semibold text-gray-800 dark:text-white/90 lg:mb-6">
+
+                <div className="flex flex-col lg:flex-row lg:justify-between lg:items-start gap-10">
+
+                    {/* LEFT: Personal Info */}
+                    <div className="flex-1">
+                        <h4 className="text-lg font-semibold text-gray-800 dark:text-white/90 mb-6">
                             Personal Information
                         </h4>
 
                         <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-7 2xl:gap-x-32">
                             <div>
-                                <p className="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">
-                                    First Name
-                                </p>
+                                <p className="mb-2 text-xs text-gray-500">First Name</p>
                                 <p className="text-sm font-medium text-gray-800 dark:text-white/90">
                                     {client.name}
                                 </p>
                             </div>
 
                             <div>
-                                <p className="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">
-                                    Last Name
-                                </p>
+                                <p className="mb-2 text-xs text-gray-500">Last Name</p>
                                 <p className="text-sm font-medium text-gray-800 dark:text-white/90">
                                     {client.name}
-
                                 </p>
                             </div>
 
                             <div>
-                                <p className="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">
-                                    Email address
-                                </p>
+                                <p className="mb-2 text-xs text-gray-500">Email address</p>
                                 <p className="text-sm font-medium text-gray-800 dark:text-white/90">
                                     {client?.email}
                                 </p>
                             </div>
 
                             <div>
-                                <p className="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">
-                                    Phone
-                                </p>
+                                <p className="mb-2 text-xs text-gray-500">Phone</p>
                                 <p className="text-sm font-medium text-gray-800 dark:text-white/90">
                                     {client?.phone || "No phone found"}
                                 </p>
                             </div>
 
                             <div>
-                                <p className="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">
-                                    Date Of Birth
-                                </p>
+                                <p className="mb-2 text-xs text-gray-500">Date Of Birth</p>
                                 <p className="text-sm font-medium text-gray-800 dark:text-white/90">
                                     {new Date(client.dob).toLocaleDateString("en-US", {
                                         year: "numeric",
@@ -289,10 +392,9 @@ export default function ClientDetails({ clientId }) {
                                     })}
                                 </p>
                             </div>
+
                             <div>
-                                <p className="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">
-                                    Time Of Birth
-                                </p>
+                                <p className="mb-2 text-xs text-gray-500">Time Of Birth</p>
                                 <p className="text-sm font-medium text-gray-800 dark:text-white/90">
                                     {client?.tob}
                                 </p>
@@ -300,11 +402,70 @@ export default function ClientDetails({ clientId }) {
                         </div>
                     </div>
 
+                    {/* MIDDLE Vertical Divider */}
+                    <div className="hidden lg:block w-px bg-gray-300 dark:bg-gray-700"></div>
+
+                    {/* RIGHT: Appointments */}
+                    <div className="flex-1">
+                        <h4 className="text-lg font-semibold text-gray-800 dark:text-white/90 mb-4">
+                            Last Appointments
+                        </h4>
+
+                        {/* SCROLL AREA */}
+                        <div className="space-y-4 max-h-80 overflow-y-auto pr-2">
+
+                            {appointments.length === 0 && (
+                                <p className="text-gray-500 text-sm">No appointments found.</p>
+                            )}
+
+                            {/* APPOINTMENT LIST */}
+                            <div className="space-y-3">
+                                {[...appointments]
+                                    .slice(-5) // last 5 appointments
+                                    .reverse() // optional: latest first
+                                    .map((item) => (
+                                        <div
+                                            key={item._id}
+                                            className="flex justify-between items-center"
+                                        >
+                                            {/* LEFT — Status + Notes */}
+                                            <div className="flex items-center gap-2">
+                                                <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-600">
+                                                    {item.status || "Done"}
+                                                </span>
+
+                                                <p className="text-sm text-gray-800 dark:text-gray-300 max-w-xs truncate">
+                                                    {item.notes}
+                                                </p>
+                                            </div>
+
+                                            {/* RIGHT — DATE */}
+                                            <span className="text-xs text-gray-500 dark:text-gray-400">
+                                                {new Date(item.date).toLocaleDateString()}
+                                            </span>
+                                        </div>
+                                    ))
+                                }
+
+                            </div>
+                        </div>
+
+                        {/* BUTTON OUTSIDE SCROLL AREA */}
+                        <button
+                            onClick={openAppointmentModal}
+                            className="mt-5 w-full rounded-lg bg-brand-500 px-4 py-2.5 text-white hover:bg-brand-600"
+                        >
+                            Create Appointment
+                        </button>
+                    </div>
+
 
                 </div>
-
-
             </div>
+
+
+
+
             <div className="p-5 border border-gray-200 rounded-2xl dark:border-gray-800 lg:p-6 mt-2">
                 <div className="flex items-center justify-between mb-4">
                     <h4 className="text-lg font-semibold text-gray-800 dark:text-white/90">
@@ -330,7 +491,7 @@ export default function ClientDetails({ clientId }) {
                     {notes.map(note => (
                         <div key={note._id} className="flex justify-between items-start border p-4 rounded shadow bg-white dark:bg-gray-800">
                             <div>
-                                <p className="text-gray-800 dark:text-white/90">{note.text}</p>
+
                                 <Badge size="sm" color="success">
                                     Visit: {new Date(note.visitDate).toLocaleDateString("en-US", {
                                         year: "numeric",
@@ -338,6 +499,7 @@ export default function ClientDetails({ clientId }) {
                                         day: "numeric",
                                     })}
                                 </Badge>
+                                <p className="text-gray-800 dark:text-white/90">{note.text}</p>
                             </div>
                             <div className="flex gap-2">
                                 {/* Edit Button */}
@@ -385,6 +547,99 @@ export default function ClientDetails({ clientId }) {
                     </div>
                 </Modal>
             </div>
+
+
+
+
+
+            {/* Appointment modal */}
+            <Modal
+                isOpen={isAppointmentOpen}
+                onClose={closeAppointmentModal}
+                className="max-w-[700px] p-6 lg:p-10"
+            >
+                <div className="flex flex-col px-2 overflow-y-auto custom-scrollbar">
+                    <div>
+                        <h5 className="mb-2 font-semibold text-gray-800 dark:text-white/90 text-xl lg:text-2xl">
+                            Create Appointment
+                        </h5>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">
+                            Schedule a new appointment for your client with all the necessary details
+                        </p>
+                    </div>
+
+                    <div className="mt-6 flex flex-col gap-4">
+                        {/* Date */}
+                        <div>
+                            <label className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                Appointment Date
+                            </label>
+                            <DatePicker
+                                id="date-picker"
+                                placeholder="Select a date"
+                                value={appointmentData.date}
+                                onChange={(dates, currentDateString) => {
+                                    // Update your state
+                                    handleChange({
+                                        target: { name: "date", value: currentDateString },
+                                    });
+                                }}
+                                className="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 shadow-theme-xs focus:border-brand-300 focus:outline-none focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
+                            />
+                        </div>
+
+                        {/* Time */}
+                        <div>
+                            <label className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                Time Slot
+                            </label>
+                            <input
+                                type="time"
+                                value={appointmentData.timeSlot}
+                                onChange={handleChange}
+                                name="timeSlot"
+                                className="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 shadow-theme-xs focus:border-brand-300 focus:outline-none focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
+                            />
+                        </div>
+
+                        {/* Notes */}
+                        <div>
+                            <label className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                Notes (optional)
+                            </label>
+                            <textarea
+                                placeholder="Add any notes for the appointment"
+                                value={appointmentData.notes}
+                                onChange={handleChange}
+                                name="notes"
+                                className="dark:bg-dark-900 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 shadow-theme-xs focus:border-brand-300 focus:outline-none focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
+                                rows={3}
+                            />
+                        </div>
+                    </div>
+
+                    {/* Footer Buttons */}
+                    <div className="flex items-center gap-3 mt-6 modal-footer sm:justify-end">
+                        <button
+                            onClick={closeAppointmentModal}
+                            type="button"
+                            className="flex w-full justify-center rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] sm:w-auto"
+                        >
+                            Cancel
+                        </button>
+                        <button
+                            onClick={handleSubmit}
+                            type="button"
+                            className="btn btn-success flex w-full justify-center rounded-lg bg-brand-500 px-4 py-2.5 text-sm font-medium text-white hover:bg-brand-600 sm:w-auto"
+                        >
+                            Save Appointment
+                        </button>
+                    </div>
+                </div>
+            </Modal>
+
+
+            {/* <Appointment /> */}
 
         </>
 
