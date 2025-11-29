@@ -25,6 +25,7 @@
     "bcryptjs": "^3.0.3",
     "flatpickr": "^4.6.13",
     "jsonwebtoken": "^9.0.2",
+    "lucide-react": "^0.555.0",
     "mongoose": "^9.0.0",
     "next": "16.0.3",
     "react": "^19.2.0",
@@ -37,6 +38,7 @@
     "shortid": "^2.2.17",
     "swiper": "^11.2.10",
     "tailwind-merge": "^2.6.0",
+    "timeago.js": "^4.0.2",
     "zustand": "^5.0.8"
   },
   "devDependencies": {
