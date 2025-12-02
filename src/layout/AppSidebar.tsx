@@ -18,6 +18,8 @@ import {
   UserCircleIcon,
 } from "../icons/index";
 import SidebarWidget from "./SidebarWidget";
+import { Bot, Sparkles, MessagesSquare, Users } from "lucide-react";
+
 
 type NavItem = {
   name: string;
@@ -42,27 +44,33 @@ const navItems: NavItem[] = [
     name: "My Appointments",
     path: "/mycalender",
   },
-  {
-    icon: <ListIcon />,
-    name: "Add Users",
-    path: "/user",
+   {
+    name: "Users",
+    icon: <Users className="w-5 h-5" />,
+    subItems: [{ name: "All User's", path: "/basic-tables", pro: false }, { name: "Add User's", path: "/user", pro: false }],
   },
+  // {
+  //   icon: <ListIcon />,
+  //   name: "Add Users",
+  //   path: "/user",
+  // },
   {
     icon: <UserCircleIcon />,
     name: "My Profile",
     path: "/profile",
   },
+  {
+    icon: <Bot className="w-6 h-6" />,
+    name: "AI Assistant",
+    path: "/assistant",
+  },
 
-  {
-    name: "Forms",
-    icon: <ListIcon />,
-    subItems: [{ name: "Form Elements", path: "/form-elements", pro: false }],
-  },
-  {
-    name: "Tables",
-    icon: <TableIcon />,
-    subItems: [{ name: "Basic Tables", path: "/basic-tables", pro: false }],
-  },
+  // {
+  //   name: "Forms",
+  //   icon: <ListIcon />,
+  //   subItems: [{ name: "Form Elements", path: "/form-elements", pro: false }],
+  // },
+ 
   {
     name: "Pages",
     icon: <PageIcon />,

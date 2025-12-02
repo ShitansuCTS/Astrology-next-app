@@ -10,6 +10,25 @@ const AstrologerSchema = new mongoose.Schema({
     phone: { type: String, trim: true },
     profilePic: { type: String, default: "" },
     role: { type: String, enum: ["user", "superAdmin"], default: "user" },
+
+    // ⭐ ADD THESE NEW FIELDS ⭐
+    plan: {
+        type: String,
+        enum: ["free", "premium"],
+        default: "free",
+    },
+
+    dailyQuestionsUsed: {
+        type: Number,
+        default: 0,
+    },
+
+    dailyResetDate: {
+        type: String, // storing "YYYY-MM-DD"
+        default: "",
+    },
+
+
     createdAt: { type: Date, default: Date.now },
 });
 
