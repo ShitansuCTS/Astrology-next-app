@@ -290,6 +290,20 @@ export default function BasicTableOne() {
 
               {/* Table Body */}
               <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
+                {filteredClients.length === 0 && (
+                  <TableRow>
+                    <TableCell
+                      colSpan={5}
+                      className="py-10 text-center text-gray-500 dark:text-gray-400"
+                    >
+                      <div className="flex flex-col items-center justify-center mx-auto gap-2">
+                        <span className="text-lg font-medium">No users assigned yet</span>
+                        <span className="text-sm">Please add your users</span>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+
+                )}
                 {filteredClients.map((items) => (
                   <TableRow key={items._id}>
                     <TableCell className="px-5 py-4 sm:px-6 text-start">

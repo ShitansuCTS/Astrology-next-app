@@ -71,7 +71,6 @@ export async function POST(req) {
 
 
 
-
 export async function GET(req) {
     try {
         await connectDB();
@@ -83,13 +82,23 @@ export async function GET(req) {
         if (!decoded) return NextResponse.json({ message: "Invalid token" }, { status: 401 });
 
         const { searchParams } = new URL(req.url);
+
+        const astrologerIdFromQuery = searchParams.get("astrologerId");
         const clientId = searchParams.get("clientId");
 
-        // Fetch all appointments for this astrologer
-        let query = { astrologerId: decoded.id }; // always filter by logged-in astrologer
+        console.log("Query astrologerId:", astrologerIdFromQuery);
+        console.log("Query clientId:", clientId);
+
+        // Base query → always filter by logged-in astrologer
+        let query = { astrologerId: decoded.id };
+
+        // If astrologerId is passed, override filter
+        if (astrologerIdFromQuery) {
+            query.astrologerId = astrologerIdFromQuery;
+        }
 
         if (clientId) {
-            query.clientId = clientId; // optionally filter by client
+            query.clientId = clientId;
         }
 
         const appointments = await Appointment.find(query).sort({ date: 1, timeSlot: 1 });

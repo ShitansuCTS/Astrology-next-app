@@ -204,37 +204,37 @@ export default function ClientDetails({ clientId }) {
     };
 
 
-    useEffect(() => {
-        // wait until BOTH are available
-        if (!clientId || !getAstorlogerId) return;
+    // useEffect(() => {
+    //     // wait until BOTH are available
+    //     if (!clientId || !getAstorlogerId) return;
 
-        const fetchAppointments = async () => {
-            try {
-                setLoading(true);
+    //     const fetchAppointments = async () => {
+    //         try {
+    //             setLoading(true);
 
-                const res = await fetch(
-                    `/api/appointments?clientId=${clientId}&astrologerId=${getAstorlogerId}`,
-                    {
-                        method: "GET",
-                        headers: { "Content-Type": "application/json" },
-                        credentials: "include",
-                    }
-                );
+    //             const res = await fetch(
+    //                 `/api/appointments?clientId=${clientId}&astrologerId=${getAstorlogerId}`,
+    //                 {
+    //                     method: "GET",
+    //                     headers: { "Content-Type": "application/json" },
+    //                     credentials: "include",
+    //                 }
+    //             );
 
-                if (!res.ok) throw new Error("Failed to fetch appointments");
+    //             if (!res.ok) throw new Error("Failed to fetch appointments");
 
-                const data = await res.json();
-                setAppointments(data.appointments);
-                console.log("Appointments:", data.appointments);
-            } catch (err) {
-                console.error(err);
-            } finally {
-                setLoading(false);
-            }
-        };
+    //             const data = await res.json();
+    //             setAppointments(data.appointments);
+    //             console.log("Appointments:", data.appointments);
+    //         } catch (err) {
+    //             console.error(err);
+    //         } finally {
+    //             setLoading(false);
+    //         }
+    //     };
 
-        fetchAppointments();
-    }, [clientId, getAstorlogerId]);
+    //     fetchAppointments();
+    // }, [clientId, getAstorlogerId]);
 
 
 
@@ -407,28 +407,28 @@ export default function ClientDetails({ clientId }) {
 
                     {/* RIGHT: Appointments */}
                     <div className="flex-1">
-                        <h4 className="text-lg font-semibold text-gray-800 dark:text-white/90 mb-4">
+                        {/* <h4 className="text-lg font-semibold text-gray-800 dark:text-white/90 mb-4">
                             Last Appointments
                         </h4>
 
-                        {/* SCROLL AREA */}
+        
                         <div className="space-y-4 max-h-80 overflow-y-auto pr-2">
 
                             {appointments.length === 0 && (
                                 <p className="text-gray-500 text-sm">No appointments found.</p>
                             )}
 
-                            {/* APPOINTMENT LIST */}
+                           
                             <div className="space-y-3">
                                 {[...appointments]
-                                    .slice(-5) // last 5 appointments
-                                    .reverse() // optional: latest first
+                                    .slice(-5)
+                                    .reverse() 
                                     .map((item) => (
                                         <div
                                             key={item._id}
                                             className="flex justify-between items-center"
                                         >
-                                            {/* LEFT — Status + Notes */}
+                                            
                                             <div className="flex items-center gap-2">
                                                 <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-600">
                                                     {item.status || "Done"}
@@ -439,7 +439,7 @@ export default function ClientDetails({ clientId }) {
                                                 </p>
                                             </div>
 
-                                            {/* RIGHT — DATE */}
+                                          
                                             <span className="text-xs text-gray-500 dark:text-gray-400">
                                                 {new Date(item.date).toLocaleDateString()}
                                             </span>
@@ -448,15 +448,18 @@ export default function ClientDetails({ clientId }) {
                                 }
 
                             </div>
-                        </div>
+                        </div> */}
 
                         {/* BUTTON OUTSIDE SCROLL AREA */}
-                        <button
-                            onClick={openAppointmentModal}
-                            className="mt-5 w-full rounded-lg bg-brand-500 px-4 py-2.5 text-white hover:bg-brand-600"
-                        >
-                            Create Appointment
-                        </button>
+                        <div className="flex justify-end mt-5">
+                            <button
+                                onClick={openAppointmentModal}
+                                className="rounded-lg bg-brand-500 px-3 py-1.5 text-sm text-white hover:bg-brand-600"
+                            >
+                                Create Appointment
+                            </button>
+                        </div>
+
                     </div>
 
 
