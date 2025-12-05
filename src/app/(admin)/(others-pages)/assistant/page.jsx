@@ -70,37 +70,27 @@ export default function AstrologerAI({ astrologerName = "Astrologer" }) {
 
 
                         <div className="flex items-center justify-center h-full px-4">
-                            <div
-                                className="
-      w-full max-w-lg 
-      bg-white/20 dark:bg-gray-800/30 
-      backdrop-blur-xl 
-      border border-white/30 dark:border-gray-700/40 
-      rounded-3xl 
-      shadow-[0_8px_25px_rgba(0,0,0,0.15)] 
-      p-10 
-      text-center 
-      transition-all 
-      duration-500
-    "
-                            >
-                                {/* Assistant Icon */}
-                                <div className="mx-auto mb-6 w-20 h-20 rounded-full bg-purple-600/20 dark:bg-purple-500/20 flex items-center justify-center shadow-inner backdrop-blur-lg">
-                                    <Sparkles className="w-12 h-12 text-purple-700 dark:text-purple-300" />
+                            <div className="w-full max-w-md p-0 md:p-8 text-center">
+
+                                {/* Icon */}
+                                <div className="mx-auto mb-6 w-16 h-16 rounded-full bg-purple-100 dark:bg-purple-900 flex items-center justify-center">
+                                    <Sparkles className="w-10 h-10 text-purple-700 dark:text-purple-300" />
                                 </div>
 
-                                {/* Welcome Title */}
-                                <h2 className="text-3xl font-extrabold text-gray-900 dark:text-white tracking-tight mb-2">
-                                    Hey {user?.fname} !
+                                {/* Title */}
+                                <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+                                    Hey {user?.fname}!
                                 </h2>
 
                                 {/* Subtitle */}
                                 <p className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed">
                                     I’m <span className="font-semibold text-purple-700 dark:text-purple-300">Astrox AI</span>,
-                                    here to help you quickly access your clients, appointments, and insights — anytime.
+                                    here to help you access your clients, appointments and insights.
                                 </p>
+
                             </div>
                         </div>
+
 
 
 
@@ -139,8 +129,8 @@ export default function AstrologerAI({ astrologerName = "Astrologer" }) {
             <div className="fixed bottom-0 left-0 right-0 p-4 bg-transparent">
                 <div className="flex items-center gap-3 w-full max-w-3xl mx-auto md:ml-[35%]">
                     <textarea
-                        className="flex-1 pl-4 md:p-3 rounded-full border border-gray-300 dark:border-gray-700 bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 resize-none focus:outline-none focus:ring-2 focus:ring-purple-500 shadow-sm"
-                        rows={2}
+                        className="flex-1 pl-4 p-3 rounded-full border border-gray-300 dark:border-gray-700 bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 resize-none focus:outline-none focus:ring-2 focus:ring-purple-500 shadow-sm"
+                        rows={1}
                         placeholder="Type your message..."
                         value={input}
                         onChange={(e) => setInput(e.target.value)}

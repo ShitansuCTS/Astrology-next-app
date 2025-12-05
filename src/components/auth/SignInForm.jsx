@@ -7,6 +7,7 @@ import { ChevronLeftIcon, EyeCloseIcon, EyeIcon } from "@/icons";
 import Link from "next/link";
 import React, { useState } from "react";
 import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 
 export default function SignInForm() {
@@ -19,6 +20,7 @@ export default function SignInForm() {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const router = useRouter();
 
   const handleChange = (e) => {
     setFormData({
@@ -46,6 +48,7 @@ export default function SignInForm() {
         toast.error(data.message || "Login failed");
       } else {
         toast.success("Login successful");
+        router.push('/');
       }
     } catch (err) {
       toast.error("Server error. Please try again.");
@@ -59,13 +62,24 @@ export default function SignInForm() {
   return (
     <div className="flex flex-col flex-1 lg:w-1/2 w-full">
       <div className="w-full max-w-md sm:pt-10 mx-auto mb-5">
-        <Link
-          href="/"
+        <button
+          onClick={(e) => {
+            const token = document.cookie.includes("auth_token");
+
+            if (!token) {
+              e.preventDefault(); // stop navigation
+              toast.error("Please login first!");
+            } else {
+              router.push('/'); // go dashboard normally
+            }
+          }}
           className="inline-flex items-center text-sm text-gray-500 transition-colors hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
         >
           <ChevronLeftIcon />
           Back to dashboard
-        </Link>
+        </button>
+
+
       </div>
       <div className="flex flex-col justify-center flex-1 w-full max-w-md mx-auto">
         <div>
