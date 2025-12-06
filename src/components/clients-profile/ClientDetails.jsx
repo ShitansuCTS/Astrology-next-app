@@ -38,6 +38,8 @@ export default function ClientDetails({ clientId }) {
         timeSlot: "",
         type: "",
         notes: "",
+        mode: "",
+        type: "",
     });
 
     const openModal = (mode = "add", note = { text: "", _id: null }) => {
@@ -157,6 +159,7 @@ export default function ClientDetails({ clientId }) {
             timeSlot: "",
             type: "",
             notes: "",
+            mode: "",
         });
     };
 
@@ -176,6 +179,7 @@ export default function ClientDetails({ clientId }) {
             timeSlot: appointmentData.timeSlot,
             type: appointmentData.type,
             notes: appointmentData.notes,
+            mode: appointmentData.mode,
         };
 
         if (!dataToSend.clientId || !dataToSend.astrologerId || !dataToSend.date || !dataToSend.timeSlot || !dataToSend.notes) {
@@ -604,6 +608,48 @@ export default function ClientDetails({ clientId }) {
                                 className="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 shadow-theme-xs focus:border-brand-300 focus:outline-none focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
                             />
                         </div>
+
+
+                        {/* Mode of apponitments */}
+                        <div>
+                            <label className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                Select Mode
+                            </label>
+                            <select
+                                name="mode"
+                                value={appointmentData.mode}
+                                onChange={handleChange}
+                                className="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 shadow-theme-xs focus:border-brand-300 focus:outline-none focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
+                            >
+                                <option value="">Select Mode</option>
+                                <option value="online">Online</option>
+                                <option value="offline">Ofline Visit</option>
+                                <option value="in-phone">Phone</option>
+                            </select>
+                        </div>
+
+
+                        {/* Type of Appointment */}
+                        <div>
+                            <label className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                Select Type
+                            </label>
+                            <select
+                                name="type"
+                                value={appointmentData.type}
+                                onChange={handleChange}
+                                className="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 shadow-theme-xs focus:border-brand-300 focus:outline-none focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
+                            >
+                                <option value="">Select Type</option>
+                                <option value="consultation">Consultation</option>
+                                <option value="follow-up">Follow-up</option>
+                                <option value="special">Special Reading</option>
+                            </select>
+                        </div>
+
+
+
+
 
                         {/* Notes */}
                         <div>

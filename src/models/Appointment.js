@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 
+
 const appointmentSchema = new mongoose.Schema(
     {
         astrologerId: {
@@ -29,6 +30,16 @@ const appointmentSchema = new mongoose.Schema(
         notes: {
             type: String,
         },
+        mode: {
+            type: String,
+            enum: ["online", "offline" , "in-phone"],
+            default: "offline",
+        },
+        type: {
+            type: String,
+            enum: ["consultation", "follow-up", "special"],
+            default: "consultation",
+        }
     },
     { timestamps: true }
 );

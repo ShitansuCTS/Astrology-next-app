@@ -9,7 +9,7 @@ export async function POST(req) {
         await connectDB();
 
         const body = await req.json();
-        const { clientId, astrologerId, date, timeSlot, notes } = body;
+        const { clientId, astrologerId, date, timeSlot, notes, mode, type } = body;
 
         // Validate required fields
         if (!clientId || !astrologerId || !date || !timeSlot) {
@@ -52,6 +52,8 @@ export async function POST(req) {
             timeSlot,
             notes: notes || "",
             status: "scheduled",
+            mode,
+            type,
         });
 
         return NextResponse.json(
@@ -82,31 +84,77 @@ export async function GET(req) {
         if (!decoded) return NextResponse.json({ message: "Invalid token" }, { status: 401 });
 
         const { searchParams } = new URL(req.url);
-
-        const astrologerIdFromQuery = searchParams.get("astrologerId");
         const clientId = searchParams.get("clientId");
 
-        console.log("Query astrologerId:", astrologerIdFromQuery);
-        console.log("Query clientId:", clientId);
-
-        // Base query → always filter by logged-in astrologer
         let query = { astrologerId: decoded.id };
 
-        // If astrologerId is passed, override filter
-        if (astrologerIdFromQuery) {
-            query.astrologerId = astrologerIdFromQuery;
-        }
+        if (clientId) query.clientId = clientId;
 
-        if (clientId) {
-            query.clientId = clientId;
-        }
+        const appointments = await Appointment.find(query)
+            .populate("clientId", "name")
+            .sort({ date: 1, timeSlot: 1 });
 
-        const appointments = await Appointment.find(query).sort({ date: 1, timeSlot: 1 });
 
-        return NextResponse.json({ appointments }, { status: 200 });
+        const formattedAppointments = appointments.map(a => ({
+            ...a.toObject(),
+            clientName: `${a.clientId?.name || ""}`,
+        }));
+
+        return NextResponse.json({ formattedAppointments }, { status: 200 });
 
     } catch (error) {
-        console.error(error);
         return NextResponse.json({ message: "Server error", error: error.message }, { status: 500 });
+    }
+}
+
+
+
+
+
+export async function PUT(req) {
+    try {
+        await connectDB();
+
+        const token = req.cookies.get("auth_token")?.value;
+        if (!token) return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+
+        const decoded = verifyToken(token);
+        if (!decoded) return NextResponse.json({ message: "Invalid token" }, { status: 401 });
+
+        const body = await req.json();
+        const { appointmentId, status } = body;
+
+        if (!appointmentId || !status) {
+            return NextResponse.json(
+                { message: "appointmentId and status required" },
+                { status: 400 }
+            );
+        }
+
+        // Update appointment only if astrologer owns it
+        const appointment = await Appointment.findOneAndUpdate(
+            { _id: appointmentId, astrologerId: decoded.id },
+            { $set: { status } },
+            { new: true }
+        );
+
+        if (!appointment) {
+            return NextResponse.json(
+                { message: "Appointment not found or unauthorized" },
+                { status: 404 }
+            );
+        }
+
+        return NextResponse.json(
+            { message: "Appointment updated", appointment },
+            { status: 200 }
+        );
+
+    } catch (error) {
+        console.log(error);
+        return NextResponse.json(
+            { message: "Server error", error: error.message },
+            { status: 500 }
+        );
     }
 }
