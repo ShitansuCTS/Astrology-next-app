@@ -15,7 +15,7 @@
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "react-jsx",
+    "jsx": "preserve",
     "incremental": true,
     "plugins": [
       {
@@ -33,8 +33,16 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    ".next/dev/types/**/*.ts"
-, "src/app/me/page.js", "src/components/auth/SignUpForm.jsx", "src/components/auth/SignInForm.jsx", "src/components/user-profile/UserMetaCard.jsx", "src/components/user-profile/UserInfoCard.jsx", "src/components/header/UserDropdown.jsx", "src/components/form/AddClientForm.jsx", "src/components/tables/BasicTableOne.jsx"  ],
+    ".next/dev/types/**/*.ts",
+    "src/app/me/page.js",
+    "src/components/auth/SignUpForm.jsx",
+    "src/components/auth/SignInForm.jsx",
+    "src/components/user-profile/UserMetaCard.jsx",
+    "src/components/user-profile/UserInfoCard.jsx",
+    "src/components/header/UserDropdown.jsx",
+    "src/components/form/AddClientForm.jsx",
+    "src/components/tables/BasicTableOne.jsx"
+  ],
   "exclude": [
     "node_modules"
   ]

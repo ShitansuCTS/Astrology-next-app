@@ -29,7 +29,7 @@ export async function POST(req) {
         }
 
         // 3️⃣ Hash password
-        const hashedPassword = await bcrypt.hash(password, 10);
+        // const hashedPassword = await bcrypt.hash(password, 10);
 
         // 4️⃣ Create new astrologer
         const astrologer = new Astrologer({

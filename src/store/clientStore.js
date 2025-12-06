@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import axios from "axios";
 
-const useClientStore = create((set, get) => ({
+const useClientStore = create((set) => ({
     clients: [],          // all clients for the logged-in astrologer
     loading: false,
     error: null,

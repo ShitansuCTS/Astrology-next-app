@@ -10,15 +10,14 @@ import {
   ChevronDownIcon,
   GridIcon,
   HorizontaLDots,
-  ListIcon,
   PageIcon,
   PieChartIcon,
   PlugInIcon,
-  TableIcon,
+
   UserCircleIcon,
 } from "../icons/index";
 import SidebarWidget from "./SidebarWidget";
-import { Bot, Sparkles, MessagesSquare, Users } from "lucide-react";
+import { Bot, Users } from "lucide-react";
 
 
 type NavItem = {
@@ -44,7 +43,7 @@ const navItems: NavItem[] = [
     name: "My Appointments",
     path: "/mycalender",
   },
-   {
+  {
     name: "Users",
     icon: <Users className="w-5 h-5" />,
     subItems: [{ name: "All User's", path: "/basic-tables", pro: false }, { name: "Add User's", path: "/user", pro: false }],
@@ -70,7 +69,7 @@ const navItems: NavItem[] = [
   //   icon: <ListIcon />,
   //   subItems: [{ name: "Form Elements", path: "/form-elements", pro: false }],
   // },
- 
+
   {
     name: "Pages",
     icon: <PageIcon />,
