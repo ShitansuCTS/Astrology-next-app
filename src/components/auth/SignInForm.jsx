@@ -8,6 +8,11 @@ import Link from "next/link";
 import React, { useState } from "react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import { useAuthStore } from "@/store/authStore";
+
+
+
+
 
 
 export default function SignInForm() {
@@ -21,6 +26,8 @@ export default function SignInForm() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const router = useRouter();
+  const { login } = useAuthStore();
+
 
   const handleChange = (e) => {
     setFormData({
@@ -29,36 +36,57 @@ export default function SignInForm() {
     });
   };
 
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   setLoading(true);
+  //   setError("");
+
+  //   try {
+  //     const res = await fetch("/api/auth/login", {
+  //       method: "POST",
+  //       headers: { "Content-Type": "application/json" },
+  //       body: JSON.stringify(formData),
+  //     });
+
+  //     const data = await res.json();
+
+  //     if (!res.ok) {
+  //       setError(data.message || "Login failed");
+  //       toast.error(data.message || "Login failed");
+  //     }
+  //     else {
+  //       login({
+  //         user: data.user,
+  //         plan: data.user.plan,
+  //         token: data.token,  // optional if you want
+  //       });
+
+  //       toast.success("Login successful");
+  //       router.push('/');
+  //       console.log("The login is :" , data);
+
+  //     }
+
+  //   } catch (err) {
+  //     toast.error("Server error. Please try again.");
+  //     setError("Server error. Please try again.");
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    setError("");
+    const result = await login(formData.email, formData.password);
 
-    try {
-      const res = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
 
-      const data = await res.json();
-
-      if (!res.ok) {
-        setError(data.message || "Login failed");
-        toast.error(data.message || "Login failed");
-      } else {
-        toast.success("Login successful");
-        router.push('/');
-      }
-    } catch (err) {
-      toast.error("Server error. Please try again.");
-      setError("Server error. Please try again.");
-    } finally {
-      setLoading(false);
+    if (result.success) {
+      toast.success("Login Sucessufully....")
+      router.push("/")
+    } else {
+      toast.error(result.message);
     }
-  };
-
-
+  }
   const handelSocialClick = () => {
     toast.error("Social login is not available yet!");
   }
@@ -200,7 +228,7 @@ export default function SignInForm() {
                   </Link>
                 </div>
                 <div>
-                  <Button className="w-full" size="sm">
+                  <Button className="w-full" size="sm" type="submit">
                     Sign in
                   </Button>
                 </div>

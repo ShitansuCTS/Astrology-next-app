@@ -42,7 +42,7 @@
     "src/components/header/UserDropdown.jsx",
     "src/components/form/AddClientForm.jsx",
     "src/components/tables/BasicTableOne.jsx"
-  ],
+, "src/app/(admin)/(others-pages)/subscription/page.tsx"  ],
   "exclude": [
     "node_modules"
   ]

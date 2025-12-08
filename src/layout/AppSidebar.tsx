@@ -17,7 +17,7 @@ import {
   UserCircleIcon,
 } from "../icons/index";
 import SidebarWidget from "./SidebarWidget";
-import { Bot, Users } from "lucide-react";
+import { Bot, Users,Crown  } from "lucide-react";
 
 
 type NavItem = {
@@ -63,13 +63,11 @@ const navItems: NavItem[] = [
     name: "AI Assistant",
     path: "/assistant",
   },
-
-  // {
-  //   name: "Forms",
-  //   icon: <ListIcon />,
-  //   subItems: [{ name: "Form Elements", path: "/form-elements", pro: false }],
-  // },
-
+  {
+    icon: <Crown className="w-6 h-6" />,
+    name: "Subscription",
+    path: "/subscription",
+  },
   {
     name: "Pages",
     icon: <PageIcon />,
