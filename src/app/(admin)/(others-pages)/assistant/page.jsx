@@ -74,7 +74,7 @@ export default function AstrologerAI({ astrologerName = "Astrologer" }) {
 
                                 {/* Icon */}
                                 <div className="mx-auto mb-6 w-16 h-16 rounded-full bg-purple-100 dark:bg-purple-900 flex items-center justify-center">
-                                    <Sparkles className="w-10 h-10 text-purple-700 dark:text-purple-300" />
+                                    <Sparkles className="w-10 h-10 text-brand-500 dark:text-purple-300" />
                                 </div>
 
                                 {/* Title */}
@@ -103,7 +103,7 @@ export default function AstrologerAI({ astrologerName = "Astrologer" }) {
                             >
                                 <div
                                     className={`max-w-xs md:max-w-lg p-4 rounded-2xl shadow-lg wrap-break-words ${msg.type === "user"
-                                        ? "bg-purple-600 text-white rounded-br-none"
+                                        ? "bg-brand-600 text-white rounded-br-none"
                                         : "bg-gray-200 text-gray-900 dark:bg-gray-800 dark:text-gray-100 rounded-bl-none"
                                         }`}
                                 >
@@ -138,7 +138,7 @@ export default function AstrologerAI({ astrologerName = "Astrologer" }) {
                     />
                     <button
                         onClick={sendMessage}
-                        className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-full shadow-lg disabled:opacity-50"
+                        className="bg-brand-500 hover:bg-brand-700 text-white px-6 py-3 rounded-full shadow-lg disabled:opacity-50"
                         disabled={loading}
                     >
                         Send
