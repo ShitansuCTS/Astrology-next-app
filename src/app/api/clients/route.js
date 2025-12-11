@@ -45,7 +45,6 @@ export async function POST(req) {
         const newClient = await Client.create({
             astrologerId: astrologer._id,
             astrologerUniqueId: astrologer.astroId,
-
             name,
             phone,
             email,
@@ -57,7 +56,7 @@ export async function POST(req) {
             notes,
             profilePic
         });
-        // console.log("New Client:", newClient);
+        console.log("New Client:", newClient);
         return NextResponse.json(
             { message: "Client added successfully", client: newClient },
             { status: 201 }

@@ -11,9 +11,10 @@ import toast from "react-hot-toast";
 import axios from "axios";
 import Image from "next/image";
 import { format } from "timeago.js"
-import { Edit2, Trash2, Plus } from "lucide-react";
+import { Edit2, Trash2, Plus, CalendarPlus, FileSearch } from "lucide-react";
 import Badge from "../ui/badge/Badge";
 import DatePicker from '@/components/form/date-picker';
+import KundliCreation from "./KundliCreation";
 // import Appointment from "./Apponments";
 
 
@@ -455,14 +456,31 @@ export default function ClientDetails({ clientId }) {
                         </div> */}
 
                         {/* BUTTON OUTSIDE SCROLL AREA */}
-                        <div className="flex justify-end mt-5">
-                            <button
-                                onClick={openAppointmentModal}
-                                className="rounded-lg bg-brand-500 px-3 py-1.5 text-sm text-white hover:bg-brand-600"
-                            >
-                                Create Appointment
-                            </button>
+
+
+                        <div className="flex items-center justify-evenly mt-10">
+
+                            {/* LEFT ACTION BUTTONS */}
+                            <div className="flex items-center gap-3">
+
+                                {/* Create Appointment */}
+                                <button
+                                    onClick={openAppointmentModal}
+                                    className="flex items-center gap-2 rounded-lg bg-brand-500 px-4 py-2 text-sm text-white hover:bg-brand-600 transition"
+                                >
+                                    <CalendarPlus className="w-4 h-4" />
+                                    Create Appointment
+                                </button>
+
+                                {/* Kundli Button */}
+                                <KundliCreation client={clientId} />
+
+                            </div>
+
+                            {/* RIGHT SIDE (empty div for spacing or future actions) */}
+                            <div></div>
                         </div>
+
 
                     </div>
 

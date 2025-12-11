@@ -14,7 +14,7 @@ const ClientSchema = new mongoose.Schema({
     },
 
     // Personal Details
-    name: { type: String, required: true, trim: true }, 
+    name: { type: String, required: true, trim: true },
     phone: { type: String, trim: true },
     email: { type: String, trim: true, lowercase: true },
     gender: { type: String },
