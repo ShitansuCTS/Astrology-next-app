@@ -10,7 +10,6 @@ import {
   ChevronDownIcon,
   GridIcon,
   HorizontaLDots,
-  PageIcon,
   PieChartIcon,
   PlugInIcon,
 
