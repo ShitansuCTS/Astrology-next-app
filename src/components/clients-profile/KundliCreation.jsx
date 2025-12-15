@@ -27,7 +27,7 @@ const KundliCreation = ({ client }) => {
             });
 
             const data = await res.json();
-            // console.log(data);
+            console.log(data);
             toast.success("Kundli created successfully");
             router.push(`/client/${client}/kundli`);
 
@@ -38,7 +38,7 @@ const KundliCreation = ({ client }) => {
 
     return (
         <button className="flex items-center gap-2 rounded-lg bg-brand-500 px-4 py-2 text-sm text-white hover:bg-brand-600 transition" onClick={fetchKundli}>
-                <FileSearch className="w-4 h-4" />
+            <FileSearch className="w-4 h-4" />
             View Kundli</button>
     )
 }

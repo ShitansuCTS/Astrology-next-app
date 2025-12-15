@@ -43,6 +43,9 @@ export async function POST(req) {
         );
         const geoData = await geoResponse.json();
 
+
+        // console.log("The geoData is  :", geoData);
+
         if (!geoData?.length)
             return NextResponse.json({ message: "Invalid address" }, { status: 400 });
 

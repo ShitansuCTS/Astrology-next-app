@@ -86,7 +86,7 @@ export default function SignInForm() {
     if (result.success) {
       setLoading(false);
       toast.success("Login Sucessufully....")
-      router.push("/")
+      window.location.href = "/";       
     } else {
       setLoading(false);
       toast.error(result.message);
