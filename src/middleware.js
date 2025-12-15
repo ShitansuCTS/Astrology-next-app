@@ -25,7 +25,7 @@ export function middleware(req) {
 // Apply middleware to ALL pages
 export const config = {
     matcher: [
-        "/((?!_next/static|_next/image|favicon.ico|api).*)",
+    "/((?!_next/static|_next/image|images|favicon.ico|api).*)",
     ],
 };
 
